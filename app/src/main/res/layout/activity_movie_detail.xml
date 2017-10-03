@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_poster"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/image_poster_desc"
+            android:src="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/image_favorite"
+            android:src="@drawable/ic_love_empty"
+            android:layout_below="@id/image_poster"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:padding="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_toLeftOf="@id/image_favorite"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/image_poster"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/text_title_sample"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_below="@id/text_title"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:text="@string/text_release_sample" />
+
+        <ImageView
+            android:id="@+id/image_rating"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/text_title"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:contentDescription="@string/image_rate_desc"
+            android:src="@drawable/ic_star" />
+
+        <TextView
+            android:id="@+id/text_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_below="@id/text_title"
+            android:layout_toLeftOf="@id/image_rating"
+            android:gravity="center"
+            android:text="@string/text_rate_sample" />
+
+        <TextView
+            android:id="@+id/text_synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_release_date"
+            android:layout_margin="16dp"
+            android:text="@string/text_synopsis_sample" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_trailers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_synopsis" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_reviews"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/recycler_trailers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

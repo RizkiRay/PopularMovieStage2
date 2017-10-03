@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Movie List</string>
+    <string name="text_release_sample">16 Dec 1995</string>
+    <string name="text_rate_sample">7.1</string>
+    <string name="text_synopsis_sample">An Amazon princess comes to the world of Man to become the greatest of the female superheroes.</string>
+    <string name="text_title_sample">Wonder Woman</string>
+    <string name="app_detail">Movie Detail</string>
+    <string name="image_poster_desc">Show Poster</string>
+    <string name="image_rate_desc">Show Star Icon</string>
+    <string name="youtube_base_url">https://www.youtube.com/watch?v=</string>
+    <string name="trailer_description">Thumbnail</string>
+    <string name="play_button">Play</string>
+    <string name="share">Share</string>
+    <string-array name="spinner_entries">
+        <item>Most Popular</item>
+        <item>Highest Rated</item>
+        <item>Favorites</item>
+    </string-array>
+</resources>
