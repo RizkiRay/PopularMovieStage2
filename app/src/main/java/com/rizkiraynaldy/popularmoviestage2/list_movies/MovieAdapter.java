@@ -169,7 +169,7 @@ public class MovieAdapter extends RecyclerView.Adapter {
         public ProgressViewHolder(View itemView) {
             super(itemView);
             pBar = (ProgressBar) itemView.findViewById(R.id.pbar_load_more);
-            Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show();
         }
     }
 
