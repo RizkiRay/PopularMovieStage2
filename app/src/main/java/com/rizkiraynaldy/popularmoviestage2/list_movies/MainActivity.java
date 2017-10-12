@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         mRecyclerView.setAdapter(adapter);
 
+
+        adapter.setOnLoadMoreListener(this);
+
         mSpinnerSort.setOnItemSelectedListener(this);
 
         setLoading();
@@ -174,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         setLoading();
         page = 1;
         movies.clear();
-        adapter = new MovieAdapter(movies, MainActivity.this, mRecyclerView);
-        adapter.setOnLoadMoreListener(this);
         mRecyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        adapter.resetAdapter();
         switch (position) {
             case 0:
                 getPopularMovie(page);
@@ -252,11 +255,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     }
 
     @Override
-    public void onListItemClick(String movieId) {
+    public void onListItemClick(String movieId, String imageUrl, ImageView image) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
         Log.i(TAG, "onListItemClick: id " + movieId);
         intent.setData(MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(movieId).build());
-        startActivity(intent);
+        intent.putExtra("image_url", imageUrl);
+        startActivity(intent,
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this, image, ViewCompat.getTransitionName(image)).toBundle());
     }
 
     @Override

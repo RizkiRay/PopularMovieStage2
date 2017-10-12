@@ -2,6 +2,7 @@ package com.rizkiraynaldy.popularmoviestage2.list_movies;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -50,6 +51,7 @@ public class MovieAdapter extends RecyclerView.Adapter {
                     super.onScrolled(recyclerView, dx, dy);
 //                    Log.i(TAG, "onScrolled: jalan");
                     totalItemCount = gridLayoutManager.getItemCount();
+                    totalItemCount = totalItemCount <= 0 ? 20 : totalItemCount;
                     lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition();
 
                     Log.i(TAG, "onScrolled: total ? lastvisibleitem + visibleThreshold " + totalItemCount + " ? " + lastVisibleItem + " + " + visibleThreshold + isLoading);
@@ -65,6 +67,11 @@ public class MovieAdapter extends RecyclerView.Adapter {
             });
         }
 
+    }
+
+    public void resetAdapter() {
+        isLoading = false;
+        isFinished = false;
     }
 
     public interface ListItemClickListener {
@@ -97,7 +104,7 @@ public class MovieAdapter extends RecyclerView.Adapter {
         this.isLoading = false;
     }
 
-    public void setFinished(boolean isFinished){
+    public void setFinished(boolean isFinished) {
         this.isFinished = isFinished;
     }
 
@@ -116,11 +123,11 @@ public class MovieAdapter extends RecyclerView.Adapter {
                 }
             });
         } else {
-            ((ProgressViewHolder)holder).pBar.setIndeterminate(true);
+            ((ProgressViewHolder) holder).pBar.setIndeterminate(true);
         }
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener){
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
@@ -151,6 +158,7 @@ public class MovieAdapter extends RecyclerView.Adapter {
         public ViewHolder(View itemView) {
             super(itemView);
             imagePoster = (ImageView) itemView.findViewById(R.id.image_poster);
+            ViewCompat.setTransitionName(imagePoster, context.getString(R.string.share));
         }
     }
 

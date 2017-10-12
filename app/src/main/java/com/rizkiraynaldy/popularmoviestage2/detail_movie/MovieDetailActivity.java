@@ -158,6 +158,19 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         } else {
             Uri uri = getIntent().getData();
             movieId = uri.getPathSegments().get(1);
+            ViewCompat.setTransitionName(imagePoster, getString(R.string.share));
+            supportPostponeEnterTransition();
+            Picasso.with(this).load(Movie.IMAGE_URL + getIntent().getExtras().getString("image_url")).fit().centerCrop().noFade().into(imagePoster, new com.squareup.picasso.Callback() {
+                @Override
+                public void onSuccess() {
+                    supportStartPostponedEnterTransition();
+                }
+
+                @Override
+                public void onError() {
+                    supportStartPostponedEnterTransition();
+                }
+            });
         }
 
         showTrailers(movieId + "");
@@ -370,10 +383,10 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
             Picasso.with(this).load(R.drawable.ic_love_filled).fit().into(imageFavorite);
             isFavorited = true;
             data.moveToFirst();
-            Picasso.with(this)
-                    .load(Movie.IMAGE_URL + data.getString(data.getColumnIndex(COLUMN_POSTER)))
-                    .fit().centerInside()
-                    .into(imagePoster);
+//            Picasso.with(this)
+//                    .load(Movie.IMAGE_URL + data.getString(data.getColumnIndex(COLUMN_POSTER)))
+//                    .fit().centerInside()
+//                    .into(imagePoster);
             textTitle.setText(data.getString(data.getColumnIndex(COLUMN_TITLE)));
             textRate1.setText(data.getString(data.getColumnIndex(COLUMN_RATING)));
             textReleaseDate.setText(data.getString(data.getColumnIndex(COLUMN_DATE)));

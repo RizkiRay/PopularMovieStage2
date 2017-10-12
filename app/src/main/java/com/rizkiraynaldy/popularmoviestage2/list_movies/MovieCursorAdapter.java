@@ -2,6 +2,7 @@ package com.rizkiraynaldy.popularmoviestage2.list_movies;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +36,7 @@ public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.
     }
 
     public interface ListItemClickListener {
-        void onListItemClick(String movieId);
+        void onListItemClick(String movieId, String imageUrl, ImageView image);
     }
 
     @Override
@@ -67,13 +68,14 @@ public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.
         public ViewHolder(View itemView) {
             super(itemView);
             imagePoster = (ImageView) itemView.findViewById(R.id.image_poster);
+            ViewCompat.setTransitionName(imagePoster, context.getString(R.string.share));
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             mCursor.moveToPosition(getAdapterPosition());
-            mOnClickListener.onListItemClick(mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID)));
+            mOnClickListener.onListItemClick(mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID)), mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)), imagePoster);
         }
     }
 }

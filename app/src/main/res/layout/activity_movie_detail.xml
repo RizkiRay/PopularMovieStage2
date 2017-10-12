@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_toLeftOf="@id/image_favorite"
             android:layout_height="48dp"
+            android:fontFamily="sans-serif-condensed"
             android:gravity="center_vertical"
             android:layout_below="@id/image_poster"
             android:layout_marginBottom="8dp"
@@ -73,6 +74,7 @@
 
         <TextView
             android:id="@+id/text_synopsis"
+            android:fontFamily="sans-serif-light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_release_date"
