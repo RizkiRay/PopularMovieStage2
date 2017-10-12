@@ -9,6 +9,7 @@ import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -134,9 +135,19 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 
         if (getIntent().getData() == null) {
             mMovie = getIntent().getExtras().getParcelable("movie");
+            ViewCompat.setTransitionName(imagePoster, getIntent().getExtras().getString("transition"));
+            supportPostponeEnterTransition();
+            Picasso.with(this).load(Movie.IMAGE_URL + mMovie.moviePoster).fit().noFade().centerCrop().into(imagePoster, new com.squareup.picasso.Callback() {
+                @Override
+                public void onSuccess() {
+                    supportStartPostponedEnterTransition();
+                }
 
-
-            Picasso.with(this).load(Movie.IMAGE_URL + mMovie.moviePoster).fit().centerInside().into(imagePoster);
+                @Override
+                public void onError() {
+                    supportStartPostponedEnterTransition();
+                }
+            });
             textTitle.setText(mMovie.originalTitle);
             textReleaseDate.setText(mMovie.releaseDate);
             textSynopsis.setText(mMovie.plotSynopsis);
@@ -182,7 +193,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putIntArray("SCROLL_POS",new int[]{scrollView.getScrollX(), scrollView.getScrollY()});
+        outState.putIntArray("SCROLL_POS", new int[]{scrollView.getScrollX(), scrollView.getScrollY()});
 
         listState = mLinearLayout.onSaveInstanceState();
         outState.putParcelable(KEY_RECYCLER_TRAILER_STATE, listState);
@@ -198,7 +209,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         super.onRestoreInstanceState(savedInstanceState);
         final int[] position = savedInstanceState.getIntArray("SCROLL_POS");
 
-        if (savedInstanceState!=null) {
+        if (savedInstanceState != null) {
             listState = savedInstanceState.getParcelable(KEY_RECYCLER_TRAILER_STATE);
             mLinearLayout.onRestoreInstanceState(listState);
 
@@ -298,7 +309,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         } else if (item.getItemId() == R.id.action_share) {
-            if (!firstTrailer.isEmpty()){
+            if (!firstTrailer.isEmpty()) {
                 shareFirstTrailer();
             } else {
                 Toast.makeText(this, "No link to Share", Toast.LENGTH_SHORT).show();
@@ -310,7 +321,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
     @Override
     public void onListItemClick(String youtubeKey) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeKey));
-        if (intent.resolveActivity(getPackageManager())!= null) startActivity(intent);
+        if (intent.resolveActivity(getPackageManager()) != null) startActivity(intent);
     }
 
     @Override

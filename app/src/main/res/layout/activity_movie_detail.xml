@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="256dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
             android:contentDescription="@string/image_poster_desc"
             android:src="@mipmap/ic_launcher" />
 

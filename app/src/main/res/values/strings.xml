@@ -11,6 +11,7 @@
     <string name="trailer_description">Thumbnail</string>
     <string name="play_button">Play</string>
     <string name="share">Share</string>
+    <string name="movie_poster">poster</string>
     <string-array name="spinner_entries">
         <item>Most Popular</item>
         <item>Highest Rated</item>
