@@ -12,6 +12,10 @@
     <string name="play_button">Play</string>
     <string name="share">Share</string>
     <string name="movie_poster">poster</string>
+    <string name="title_action_sort">Sort</string>
+    <string name="title_sort_popular">Most Popular</string>
+    <string name="title_sort_top_rated">Highest Rated</string>
+    <string name="title_sort_favorite">My Favorites</string>
     <string-array name="spinner_entries">
         <item>Most Popular</item>
         <item>Highest Rated</item>

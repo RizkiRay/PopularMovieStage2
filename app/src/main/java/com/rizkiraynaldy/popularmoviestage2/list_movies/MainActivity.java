@@ -3,6 +3,7 @@ package com.rizkiraynaldy.popularmoviestage2.list_movies;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.LoaderManager;
@@ -10,16 +11,16 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.rizkiraynaldy.popularmoviestage2.R;
 import com.rizkiraynaldy.popularmoviestage2.SpacesItemDecoration;
@@ -39,41 +40,44 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener,
-        MovieCursorAdapter.ListItemClickListener,
-        AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, OnLoadMoreListener {
+        MovieCursorAdapter.ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, OnLoadMoreListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int FAVORITE_MOVIES = 100;
     private static final String RECYCLER_MOVIE_STATE = "movie_list_state";
     private RecyclerView mRecyclerView;
     private List<Movie> movies;
-    private AppCompatSpinner mSpinnerSort;
     private Parcelable mGridState;
     int page = 1;
     private MovieAdapter adapter;
     private ProgressBar mProgressLoading;
+    private int movieType = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
+        getSupportActionBar().setTitle(" ");
+
         movies = new ArrayList<>();
 
         mProgressLoading = (ProgressBar) findViewById(R.id.progress_loading);
 
-
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_movie);
-        mSpinnerSort = (AppCompatSpinner) findViewById(R.id.spinner_sort);
 
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        } else {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-        }
-        int spacingPixels = getResources().getDimensionPixelSize(R.dimen.item_spacing);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(spacingPixels));
+
+//        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+//        } else {
+//            mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+//        }
+//        int spacingPixels = getResources().getDimensionPixelSize(R.dimen.item_spacing);
+//        mRecyclerView.addItemDecoration(new SpacesItemDecoration(spacingPixels));
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         adapter = new MovieAdapter(movies, this, mRecyclerView);
 
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
         adapter.setOnLoadMoreListener(this);
 
-        mSpinnerSort.setOnItemSelectedListener(this);
+        getPopularMovie(page);
 
         setLoading();
     }
@@ -157,46 +161,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onSaveInstanceState(outState);
         mGridState = mRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(RECYCLER_MOVIE_STATE, mGridState);
+        outState.putInt("movieType", movieType);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            mRecyclerView = savedInstanceState.getParcelable(RECYCLER_MOVIE_STATE);
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(mGridState);
+            movieType = savedInstanceState.getInt("movieType");
+            try {
+                mRecyclerView = savedInstanceState.getParcelable(RECYCLER_MOVIE_STATE);
+                mRecyclerView.getLayoutManager().onRestoreInstanceState(mGridState);
+            } catch (ClassCastException e) {
+                Log.e(TAG, "onRestoreInstanceState: " + e.toString());
+            }
         }
 
-    }
-
-
-    //on spinner item selected
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(TAG, "onItemSelected: " + position);
-        setLoading();
-        page = 1;
-        movies.clear();
-        mRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        adapter.resetAdapter();
-        switch (position) {
-            case 0:
-                getPopularMovie(page);
-                break;
-            case 1:
-                getTopRatedMovie(page);
-                break;
-            case 2:
-                getFavoritedMovie();
-                break;
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mSpinnerSort.getSelectedItemPosition() == 2) {
+        if (movieType == 2) {
             getSupportLoaderManager().restartLoader(FAVORITE_MOVIES, null, this);
         }
     }
@@ -207,8 +193,46 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_sort) {
+            PopupMenu popUp = new PopupMenu(this, findViewById(R.id.action_sort));
+            popUp.getMenuInflater().inflate(R.menu.menu_sort, popUp.getMenu());
+            popUp.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Log.i(TAG, "onItemSelected: " + item.getItemId());
+                    setLoading();
+                    page = 1;
+                    movies.clear();
+                    mRecyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    adapter.resetAdapter();
+                    switch (item.getItemId()) {
+                        case R.id.action_sort_popular:
+                            movieType = 0;
+                            getPopularMovie(page);
+                            break;
+                        case R.id.action_sort_top_rated:
+                            movieType = 1;
+                            getTopRatedMovie(page);
+                            break;
+                        case R.id.action_sort_favorite:
+                            movieType = 2;
+                            getFavoritedMovie();
+                            break;
+                    }
+                    return true;
+                }
+            });
+            popUp.show();
+        }
+        return true;
     }
 
     @Override
@@ -268,9 +292,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     public void onLoadMore() {
         Log.i(TAG, "onLoadMore: called");
         Log.i(TAG, "onLoadMore: called " + page);
-        if (mSpinnerSort.getSelectedItemPosition() == 0) {
+        if (movieType == 0) {
             getPopularMovie(page);
-        } else if (mSpinnerSort.getSelectedItemPosition() == 1) {
+        } else if (movieType == 1) {
             getTopRatedMovie(page);
         }
     }

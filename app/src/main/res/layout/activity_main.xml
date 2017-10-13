@@ -4,26 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
     tools:context=".list_movies.MainActivity">
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/spinner_sort"
-        android:entries="@array/spinner_entries"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="?attr/actionBarSize">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="21sp"
+            android:fontFamily="sans-serif-condensed" />
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_movie"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/spinner_sort"
+        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
     <ProgressBar
         android:id="@+id/progress_loading"
-        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:visibility="gone" />
 </RelativeLayout>

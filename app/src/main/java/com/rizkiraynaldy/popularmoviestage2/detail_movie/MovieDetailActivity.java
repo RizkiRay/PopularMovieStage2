@@ -6,8 +6,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -17,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +41,7 @@ import com.rizkiraynaldy.popularmoviestage2.model.Trailer;
 import com.rizkiraynaldy.popularmoviestage2.model.TrailerResponse;
 import com.rizkiraynaldy.popularmoviestage2.network.ApiClient;
 import com.rizkiraynaldy.popularmoviestage2.network.ApiInterface;
+import com.rizkiraynaldy.popularmoviestage2.utils.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -71,6 +76,9 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
     private TextView textSynopsis;
     private TextView textRate;
     private TextView textRate1;
+    private TextView textToolbarTitle;
+    private Toolbar toolbar;
+    private AppBarLayout appBarLayout;
 
     private String movieId;
     private NestedScrollView scrollView;
@@ -91,8 +99,32 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle(" ");
+
+        textToolbarTitle = (TextView) findViewById(R.id.title);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            int scrollRange = -1;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                //Initialize the size of the scroll
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                //Check if the view is collapsed
+                if (scrollRange + verticalOffset == 0) {
+//                    toolbar.setBackgroundColor(ContextCompat.getColor(MovieDetailActivity.this, R.color.colorPrimary));
+                    textToolbarTitle.setText(getString(R.string.app_name));
+                } else {
+                    getSupportActionBar().setTitle(" ");
+                    textToolbarTitle.setText(" ");
+                }
+            }
+        });
 
         scrollView = (NestedScrollView) findViewById(R.id.scroll_view);
         imagePoster = (ImageView) findViewById(R.id.image_poster);
@@ -149,7 +181,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
                 }
             });
             textTitle.setText(mMovie.originalTitle);
-            textReleaseDate.setText(mMovie.releaseDate);
+            textReleaseDate.setText(Util.dateFormatter(mMovie.releaseDate));
             textSynopsis.setText(mMovie.plotSynopsis);
             textRate1.setText(mMovie.userRating);
 
@@ -389,7 +421,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 //                    .into(imagePoster);
             textTitle.setText(data.getString(data.getColumnIndex(COLUMN_TITLE)));
             textRate1.setText(data.getString(data.getColumnIndex(COLUMN_RATING)));
-            textReleaseDate.setText(data.getString(data.getColumnIndex(COLUMN_DATE)));
+            textReleaseDate.setText(Util.dateFormatter(data.getString(data.getColumnIndex(COLUMN_DATE))));
             textSynopsis.setText(data.getString(data.getColumnIndex(COLUMN_SYNOPSIS)));
 
         } else {

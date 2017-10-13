@@ -23,7 +23,7 @@ public class Movie implements Parcelable{
     @SerializedName("release_date")
     public String releaseDate;
 
-    public static final String IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
+    public static final String IMAGE_URL = "http://image.tmdb.org/t/p/w500/";
 
     protected Movie(Parcel in) {
         id = in.readInt();

@@ -75,7 +75,10 @@ public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.
         @Override
         public void onClick(View v) {
             mCursor.moveToPosition(getAdapterPosition());
-            mOnClickListener.onListItemClick(mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID)), mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)), imagePoster);
+            mOnClickListener.onListItemClick(
+                    mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID)),
+                    mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER)),
+                    imagePoster);
         }
     }
 }

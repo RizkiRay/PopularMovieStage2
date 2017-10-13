@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/image_poster"
+            android:layout_marginRight="16dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_love_empty" />
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/image_poster"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@id/image_favorite"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_vertical"
+            android:text="@string/text_title_sample"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_title"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:text="@string/text_release_sample" />
+
+        <TextView
+            android:id="@+id/text_synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_release_date"
+            android:layout_margin="16dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/text_synopsis_sample" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_trailers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_synopsis" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_trailers"
+            android:layout_marginTop="8dp" />
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
